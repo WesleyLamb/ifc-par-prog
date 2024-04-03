@@ -1,0 +1,11 @@
+{
+    "files.associations": {
+        "*.ejs": "html",
+        "stdio.h": "c",
+        "termios.h": "c",
+        "food.h": "c",
+        "gameboard.h": "c",
+        "stdlib.h": "c",
+        "string.h": "c"
+    }
+}
