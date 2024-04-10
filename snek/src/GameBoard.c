@@ -4,6 +4,9 @@
 #include <termios.h>
 #include <string.h>
 
+void render(GameBoard*, Snek*, Food*);
+void update(GameBoard*, Snek*, Food*);
+
 GameBoard* createGameBoard(int height, int width) {
     GameBoard* gameBoard = malloc(sizeof(GameBoard));
     gameBoard->height = height;
@@ -123,4 +126,8 @@ void drawScreenBottom(char *, GameBoard *)
 void appendStr(char* dest, char* src)
 {
     dest = strcat(dest, src);
+}
+
+void update(GameBoard* gameBoard, Snek* snek, Food* food) {
+
 }

@@ -12,5 +12,8 @@ typedef struct sSnek {
 
 Snek* createNewSnek();
 void createSnekSeg(Snek*);
+void moveSnek(Snek*);
+void applyMove(Snek*);
+void setSnekDirection(Snek*, int, int);
 
 #endif
