@@ -13,6 +13,7 @@ Snek* createNewSnek() {
     snek->y = 0;
     snek->x_step = 1;
     snek->y_step = 0;
+    snek->next = NULL;
     createSnekSeg(snek);
     createSnekSeg(snek);
 
@@ -33,6 +34,7 @@ void createSnekSeg(Snek* snek) {
     seg->next->y = seg->y - seg->y_step;
 
     seg->next->prev = seg;
+    seg->next->next = NULL;
 }
 
 /** Move para tal direção */

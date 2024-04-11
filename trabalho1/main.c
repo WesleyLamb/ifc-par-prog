@@ -93,7 +93,7 @@ void runGame(GameBoard* gameBoard, Snek* snek, Food* food) {
     while (!gameOver) {
         moveSnek(gameBoard, snek, food);
         render(gameBoard, snek, food);
-        usleep(200*1000);
+        usleep(150*1000);
     }
     pthread_cancel(id_read);
 }

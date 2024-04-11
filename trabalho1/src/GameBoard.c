@@ -4,10 +4,6 @@
 #include <termios.h>
 #include <string.h>
 
-void render(GameBoard*, Snek*, Food*);
-void update(GameBoard*, Snek*, Food*);
-
-
 /** Cria uma instância do "tabuleiro" */
 GameBoard* createGameBoard(int height, int width) {
     GameBoard* gameBoard = malloc(sizeof(GameBoard));
@@ -76,7 +72,8 @@ void drawGameBoard(char* screen, GameBoard* gameBoard, Snek* snek, Food* food)
 
     // draw snek body
     while (NULL != (sn = sn->next)) {
-        strcpy(mat[sn->y][sn->x], SNEK_BODY_SPRITE);
+        if ((sn->x >= 0) && (sn->x < gameBoard->width) && (sn->y >= 0) && (sn->y < gameBoard->height))
+            strcpy(mat[sn->y][sn->x], SNEK_BODY_SPRITE);
     }
     for (i = 0; i < gameBoard->height; i++) {
         appendStr(screen, DOUBLE_VERTICAL);
@@ -111,9 +108,16 @@ void drawGameBoardBottom(char* screen, GameBoard* gameBoard)
 /** A ideia era escrever algumas informações como pontos,
  * tempo decorrido, mas fiquei sem saco pra implementar (alivia pra nóis psor, fiquei a noite inteira acordado)
 */
-void drawGameInfo(char *, GameBoard *, Snek *, Food *)
+void drawGameInfo(char* screen, GameBoard* gameBoard, Snek* snek, Food* food)
 {
-    // TODO: implementar
+    char* helper = malloc(sizeof(char) * 200);
+    zeroFill(helper);
+    appendStr(helper, "Score: ");
+    appendStr(helper, intToStr(getSize(snek) - 3));
+    appendStr(helper, "\n");
+
+    appendStr(screen, helper);
+    free(helper);
 }
 
 /** Concatena uma string e escreve na primeira variável */
@@ -189,4 +193,20 @@ void moveSnek(GameBoard* gameBoard,Snek* snek, Food* food) {
     }
     eatFood(gameBoard, snek, food);
     canChangeDirection = true;
+}
+
+int getSize(Snek* snek) {
+    int size = 0;
+    Snek* sn = snek;
+    while (NULL != sn) {
+        size++;
+        sn = sn->next;
+    }
+    return size;
+}
+
+char* intToStr(int aInt) {
+    char* buffer = malloc(sizeof(char)*11);
+    sprintf(buffer, "%d", aInt);
+    return buffer;
 }
