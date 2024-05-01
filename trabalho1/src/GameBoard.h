@@ -39,5 +39,7 @@ void moveFood(GameBoard*, Snek*, Food*);
 bool canMoveToDirection(GameBoard*, Snek*);
 void eatFood(GameBoard*, Snek*, Food*);
 void moveSnek(GameBoard*, Snek*, Food*);
+int getSize(Snek*);
+char* intToStr(int);
 
 #endif
