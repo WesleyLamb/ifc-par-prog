@@ -5,34 +5,31 @@
 #include <pthread.h>
 #include <time.h>
 
-#ifdef __linux
-    #include <unistd.h>
-    #include <termios.h>
-    struct termios original;
-#elif _Win32
-    #include <windows.h>
-#endif
+#include <unistd.h>
+#include <termios.h>
+struct termios original;
 
-#include "src/GameBoard.h"
-#include "src/Snek.h"
-#include "src/Food.h"
+#include "src/BattleField.h"
+#include "src/Plane.h"
 
 #define KEY_LEFT 'D'
 #define KEY_UP 'A'
 #define KEY_RIGHT 'C'
 #define KEY_DOWN 'B'
 
-Snek* snek;
-Food* food;
+BattleField* battleField;
+Plane* plane;
+
 pthread_t id_game, id_read;
 
 void* thread_game(void*);
 void* thread_keys(void*);
 
-void runGame(GameBoard*, Snek*, Food*);
 void endProcess(int);
 void enableRAWMode();
 void disableRAWMode();
+
+// void runGame(GameBoard*, Snek*, Food*);
 
 int main () {
     srand(time(NULL));
@@ -50,14 +47,13 @@ int main () {
 
 /** Thread principal que inicia o jogo */
 void* thread_game(void* args) {
-    GameBoard* gameBoard = createGameBoard(BOARD_HEIGHT, BOARD_WIDTH);
-    snek = createNewSnek();
-    food = createFood();
-    runGame(gameBoard, snek, food);
+    battleField = createNewBattleField();
+    plane = createNewPlane(battleField->width / 2, battleField->height - 10);
 
-    free(food);
-    free(snek);
-    free(gameBoard);
+    runGame(battleField, plane);
+
+    free(plane);
+    free(battleField);
     endProcess(SIGINT);
 }
 
@@ -72,16 +68,16 @@ void* thread_keys(void* args) {
             ch = getchar();
             switch (ch) {
                 case KEY_LEFT:
-                    setSnekDirection(snek, -1, 0);
+                    movePlane(plane, -1, 0);
                     break;
                 case KEY_UP:
-                    setSnekDirection(snek, 0, -1);
+                    movePlane(plane, 0, -1);
                     break;
                 case KEY_RIGHT:
-                    setSnekDirection(snek, 1, 0);
+                    movePlane(plane, 1, 0);
                     break;
                 case KEY_DOWN:
-                    setSnekDirection(snek, 0, 1);
+                    movePlane(plane, 0, 1);
                     break;
                 default:
                     break;
@@ -95,9 +91,8 @@ void* thread_keys(void* args) {
  * a atualização da tela e a movimentação dos objetos */
 void runGame(GameBoard* gameBoard, Snek* snek, Food* food) {
     while (!gameOver) {
-        moveSnek(gameBoard, snek, food);
-        render(gameBoard, snek, food);
-        usleep(150*1000);
+        render(gameBoard, plane, enemies);
+        usleep(200*1000);
     }
     pthread_cancel(id_read);
 }

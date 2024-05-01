@@ -7,10 +7,10 @@
             "args": [
                 "-fdiagnostics-color=always",
                 "-g",
-                "${file}",
-                "${fileDirname}/src/*.c",
+                "${workspaceFolder}/main.c",
+                "${workspaceFolder}/src/*.c",
                 "-o",
-                "${fileDirname}/${fileBasenameNoExtension}"
+                "${workspaceFolder}/main"
             ],
             "options": {
                 "cwd": "${fileDirname}"
