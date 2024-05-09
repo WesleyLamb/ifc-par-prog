@@ -9,16 +9,23 @@
 #include <termios.h>
 struct termios original;
 
-#include "src/BattleField.h"
+#include "src/Battlefield.h"
 #include "src/Plane.h"
+#include "src/EnemyList.h"
+#include "src/ProjectileList.h"
 
 #define KEY_LEFT 'D'
 #define KEY_UP 'A'
 #define KEY_RIGHT 'C'
 #define KEY_DOWN 'B'
 
-BattleField* battleField;
+Battlefield* battlefield;
 Plane* plane;
+EnemyList* enemies;
+ProjectileList* planeProjectiles;
+ProjectileList* enemyProjectiles;
+
+bool gameOver = false;
 
 pthread_t id_game, id_read;
 
@@ -29,7 +36,7 @@ void endProcess(int);
 void enableRAWMode();
 void disableRAWMode();
 
-// void runGame(GameBoard*, Snek*, Food*);
+void runGame();
 
 int main () {
     srand(time(NULL));
@@ -47,13 +54,16 @@ int main () {
 
 /** Thread principal que inicia o jogo */
 void* thread_game(void* args) {
-    battleField = createNewBattleField();
-    plane = createNewPlane(battleField->width / 2, battleField->height - 10);
+    battlefield = createNewBattlefield();
+    plane = createNewPlane(battlefield->width / 2, battlefield->height - 10);
+    enemies = createEnemyList();
+    enemyProjectiles = createProjectileList();
+    planeProjectiles = createProjectileList();
 
-    runGame(battleField, plane);
+    runGame();
 
     free(plane);
-    free(battleField);
+    free(battlefield);
     endProcess(SIGINT);
 }
 
@@ -83,16 +93,22 @@ void* thread_keys(void* args) {
                     break;
             }
         }
+        if (getchar() == 32) { // space
+            insertProjectileNode(planeProjectiles, createProjectile(plane->x, plane->y - 1, 0, -1));
+        }
     }
 
 };
 
 /** Função que controla a passagem de tempo do jogo, executa
  * a atualização da tela e a movimentação dos objetos */
-void runGame(GameBoard* gameBoard, Snek* snek, Food* food) {
+void runGame() {
     while (!gameOver) {
-        render(gameBoard, plane, enemies);
-        usleep(200*1000);
+        update(battlefield, plane, enemies, planeProjectiles, enemyProjectiles);
+        render(battlefield, plane, enemies, planeProjectiles, enemyProjectiles);
+        if (plane->lives <= 0)
+            gameOver == true;
+        usleep(100*1000);
     }
     pthread_cancel(id_read);
 }
