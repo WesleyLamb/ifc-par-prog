@@ -124,14 +124,6 @@ bool Engine::tileInUse(int aX, int aY)
     return true;
 }
 
-Engine::Engine()
-{
-}
-
-Engine::~Engine()
-{
-}
-
 void Engine::start()
 {
     while (!gameOver) {

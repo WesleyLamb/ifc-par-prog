@@ -22,7 +22,6 @@ class Engine {
     protected:
         std::list<std::unique_ptr<Enemy>> enemies;
         std::list<std::unique_ptr<Projectile>> playerProjectiles;
-        // std::list<std::unique_ptr<Projectile>> enemiesProjectiles;
 
         Player* player;
         int lives = PLAYER_STARTING_LIVES;
@@ -37,14 +36,10 @@ class Engine {
     public:
         bool gameOver = false;
 
-        Engine();
-        ~Engine();
-
         void start();
         void addPlayer(Player* aPlayer);
         void playerMove(int xVariation, int yVariation);
         void playerShoot();
-        // void addEnemy(Enemy* anEnemy);
 };
 
 #endif

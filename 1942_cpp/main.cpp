@@ -81,38 +81,6 @@ void* thread_game(void* args) {
  * Esta tem a finalidade de controlar as teclas
  * pressionadas para definir a direção do jogador */
 void* thread_keys(void* args) {
-    // initscr();
-
-    // cbreak();
-    // noecho();
-    // nodelay(stdscr, TRUE);
-
-    // scrollok(stdscr, TRUE);
-    // int ch;
-    // while (1) {
-    //     ch = getch();
-    //     switch (ch) {
-    //         case KEY_LEFT:
-    //             engine->playerMove(0, -1);
-    //             break;
-    //         case KEY_UP:
-    //             engine->playerMove(-1, 0);
-    //             break;
-    //         case KEY_RIGHT:
-    //             engine->playerMove(0, 1);
-    //             break;
-    //         case KEY_DOWN:
-    //             engine->playerMove(1, 0);
-    //             break;
-    //         case 32:
-    //             engine->playerShoot();
-    //             break;
-    //         default:
-    //             break;
-    //     }
-    //     usleep(100000);
-    // }
-
     char ch;
     while (!engine->gameOver) {
         if (getchar() == '\033') {
